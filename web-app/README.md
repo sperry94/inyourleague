@@ -1,3 +1,7 @@
+# inyourleague: Event Service
+
+This is the website for the inyourleague application
+
 ### References
 - Flask documentation
 - Docker tutorial
