@@ -1,4 +1,4 @@
-# inyourleague: Event Service
+# inyourleague: Website
 
 This is the website for the inyourleague application
 
