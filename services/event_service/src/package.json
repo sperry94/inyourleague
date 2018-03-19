@@ -4,7 +4,7 @@
   "description": "Event service for the In Your League application",
   "main": "event_service.js",
   "scripts": {
-    "start": "nodemon event_service.js",
+    "start": "node event_service.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

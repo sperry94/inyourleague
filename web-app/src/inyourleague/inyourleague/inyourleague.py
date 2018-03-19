@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 import requests
 
-event_service_endpoint = 'http://localhost:8888/';
+event_service_endpoint = 'https://iyl-svc-event.herokuapp.com/';
 
 app = Flask(__name__)
 
