@@ -27,4 +27,4 @@ def form_submission():
     session['count'] = res.json()['count']
     return redirect('/')
 
-app.secret_key = 'THIS_WILL_BE_SUPER_SECRET_LATER'
+app.secret_key = environ['FLASK_SECRET_KEY']
