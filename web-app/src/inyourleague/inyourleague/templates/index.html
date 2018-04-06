@@ -1,13 +1,15 @@
-<!doctype html>
-<h1>HELLO THERE!</h1>
-<h2>
-  {% if submission %}
-    The last submission for this session was submission #{{ submission }} for the server.
-  {% else %}
-    No submissions have been made for this session.
-  {% endif %}
-</h2>
-<form action="form_post" method="post">
-  <input type="text" name="text"/>
-  <button type="submit">Submit</button>
-</form>
+{% extends 'layout.html' %}
+{% block body %}
+  <h1>HELLO THERE!</h1>
+  <h2>
+    {% if submission %}
+      The last submission for this session was submission #{{ submission }} for the server.
+    {% else %}
+      No submissions have been made for this session.
+    {% endif %}
+  </h2>
+  <form action="form_post" method="post">
+    <input type="text" name="text"/>
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}
