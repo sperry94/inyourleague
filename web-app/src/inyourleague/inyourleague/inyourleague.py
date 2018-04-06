@@ -20,6 +20,11 @@ def index():
         return redirect(url_for('google.login'))
     return render_template('index.html', submission=session.get('count', ''))
 
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return redirect('/')
+
 @app.route('/form_post', methods=['POST'])
 def form_submission():
     submitted_input = request.form['text']
