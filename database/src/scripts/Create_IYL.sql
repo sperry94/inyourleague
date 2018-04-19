@@ -1,1 +1,0 @@
-\i Table_Account.sql

@@ -1,7 +1,4 @@
 CREATE TABLE IF NOT EXISTS account(
-	oauthidhash BYTEA PRIMARY KEY,
-	accountkey UUID UNIQUE NOT NULL
+	oauthid TEXT PRIMARY KEY,
+	accounttype INTEGER NOT NULL
 );
-
-ALTER TABLE account ADD COLUMN IF NOT EXISTS
-accounttype INTEGER NOT NULL

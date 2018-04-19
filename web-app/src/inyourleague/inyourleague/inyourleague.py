@@ -18,8 +18,9 @@ app.register_blueprint(make_google_blueprint(
 def index():
     if not google.authorized:
         return redirect(url_for('google.login'))
-    resp = google.get('/oauth2/v2/userinfo')
-    print(resp.json())
+    #resp = google.get('/oauth2/v2/userinfo')
+    #print(resp.json())
+    print(session)
     return render_template('index.html', submission=session.get('count', ''))
 
 @app.route('/logout', methods=['POST'])
