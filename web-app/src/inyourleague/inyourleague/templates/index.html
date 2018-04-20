@@ -1,15 +1,14 @@
-{% extends 'layout.html' %}
+{% extends 'layouts/layout.html' %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/index_style.css') }}">
+{% endblock %}
+
 {% block body %}
-  <h1>HELLO THERE!</h1>
-  <h2>
-    {% if submission %}
-      The last submission for this session was submission #{{ submission }} for the server.
-    {% else %}
-      No submissions have been made for this session.
-    {% endif %}
-  </h2>
-  <form action="form_post" method="post">
-    <input type="text" name="text"/>
-    <button type="submit">Submit</button>
-  </form>
+  <div id="titleWrapper">
+    <h1>In Your League</h1>
+  </div>
+  <div id="enterSiteButtonWrapper">
+    <a class="btn btn-outline-primary" href="/home">Enter Site</a>
+  </div>
 {% endblock %}

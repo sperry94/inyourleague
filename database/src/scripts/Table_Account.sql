@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS account(
+	oauthid TEXT PRIMARY KEY,
+	accounttype INTEGER NOT NULL
+);

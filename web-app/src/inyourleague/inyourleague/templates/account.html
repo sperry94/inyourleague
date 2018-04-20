@@ -1,0 +1,20 @@
+{% extends 'layouts/navbar_layout.html' %}
+
+{% block substylesheets %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/account_style.css') }}">
+{% endblock %}
+
+{% block subbody %}
+<div id="accountFormWrapper">
+  <form action="account" method="post">
+    <div class="form-group">
+      <label for="AccountType">Account Type:</label>
+      <select class="form-control" name="AccountType" required>
+        <option value="0">Coach</option>
+        <option value="1">Parent</option>
+      </select>
+    </div>
+    <button class="btn btn-outline-primary float-right" type="submit">Create Account</button>
+  </form>
+</div>
+{% endblock %}

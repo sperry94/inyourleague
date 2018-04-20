@@ -1,0 +1,11 @@
+CREATE OR REPLACE FUNCTION account_exists(oauthid_tocheck TEXT)
+RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(SELECT 1 FROM account WHERE oauthid = oauthid_tocheck) THEN
+    RETURN TRUE;
+  END IF;
+
+  RETURN FALSE;
+END;
+$$ LANGUAGE plpgsql
+RETURNS NULL ON NULL INPUT;
