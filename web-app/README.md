@@ -28,3 +28,5 @@ This is the website for the inyourleague application
 - https://www.w3schools.com/css/css_align.asp
 - https://stackoverflow.com/questions/5721904/make-body-fill-entire-screen
 - https://stackoverflow.com/questions/4206348/how-can-i-center-this-link
+- https://stackoverflow.com/questions/10336194/twitter-bootstrap-top-nav-bar-blocking-top-content-of-the-page
+- https://stackoverflow.com/questions/5805059/how-do-i-make-a-placeholder-for-a-select-box

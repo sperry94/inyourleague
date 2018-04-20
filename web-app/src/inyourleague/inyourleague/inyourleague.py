@@ -19,7 +19,7 @@ app.register_blueprint(make_google_blueprint(
 
 @app.before_request
 def before_request():
-    print(request.endpoint)
+    print(session)
     if request.endpoint == 'index' \
     or request.endpoint == 'google.login' \
     or request.endpoint == 'google.authorized' \
@@ -91,11 +91,24 @@ def account_view():
 @app.route('/account', methods=['POST'])
 def account_save():
     oauthToken = session.get('google_oauth_token',{}).get('id_token','')
+    accountType = request.form.get('AccountType', None)
+
+    if not accountType:
+        print('No account type was provided.')
+        abort(500)
+
+    try:
+        accountType = int(accountType)
+    except Exception as error:
+        print(error)
+        abort(500)
+
     save_res = put(account_service_endpoint, \
-        cookies={'OAuthToken': oauthToken}, json={'AccountType':4})
+        cookies={'OAuthToken': oauthToken}, json={'AccountType': accountType})
 
     if not save_res.ok:
-        return render_template('error.html', error_message=save_res.text)
+        print('The account save was unsuccessful.')
+        abort(500)
 
     return redirect(url_for('home'))
 

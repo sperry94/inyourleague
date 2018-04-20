@@ -15,3 +15,4 @@ This is the service that handles account operations for the inyourleague applica
 - http://tobyho.com/2011/01/28/checking-types-in-javascript/
 - https://stackoverflow.com/questions/42964102/syntax-for-async-arrow-function
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null

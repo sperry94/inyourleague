@@ -107,7 +107,7 @@ app.put('/', async (req, res) => {
     return;
   }
 
-  if(!req.body.AccountType || !(typeof(req.body.AccountType) === "number")) {
+  if(req.body.AccountType == null || !(typeof(req.body.AccountType) === "number")) {
     const msg = 'No account type was specified for the account to save.';
     console.log(msg);
     res.status(400).send(msg);
