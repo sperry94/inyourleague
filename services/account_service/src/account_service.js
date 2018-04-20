@@ -17,6 +17,63 @@ const pgPool = new pg.Pool({
 
 pgPool.connect();
 
+app.get('/exists', async (req, res) => {
+  if(!req.cookies.OAuthToken) {
+    res.status(401).send('No auth token was provided.');
+    return;
+  }
+
+  let oauthInfo;
+  try {
+    oauthInfo = await googleOAuthClient.verifyIdToken({
+      idToken: req.cookies.OAuthToken,
+      audience: process.env.GOOGLE_OAUTH_CLIENT_ID
+    });
+  } catch(error) {
+    console.log(error);
+    res.status(401).send('An error occurred when trying to verify the auth token.');
+    return;
+  }
+
+  if(!oauthInfo){
+    console.log('Token verification result was null.');
+    res.status(401).send('Token could not be verified.');
+    return;
+  }
+
+  const oauthInfoPayload = oauthInfo.getPayload()
+
+  if(!oauthInfoPayload || !oauthInfoPayload.sub) {
+    console.log('Token verification payload or token ID was null.');
+    res.status(401).send('Token could not be verified.');
+    return;
+  }
+
+  let queryRes;
+  try {
+    queryRes = await pgPool.query('SELECT account_exists($1) as exists',
+      [oauthInfoPayload.sub]);
+  } catch(error) {
+    console.log(error);
+    res.status(500).send('An error occurred when trying to check if the account exists.');
+    return;
+  }
+
+  if(!queryRes || !queryRes.rows || !queryRes.rows[0]) {
+    console.log('The account existence check returned invalid data.');
+    res.status(500).send('An error occurred when trying to check if the account exists.');
+    return;
+  }
+
+  if(!queryRes.rows[0].exists) {
+    console.log('account',oauthInfoPayload.sub, 'does not exist')
+    res.status(404).send('The account does not exist.');
+    return;
+  }
+
+  res.sendStatus(200);
+});
+
 app.put('/', async (req, res) => {
 
   if(!req.cookies.OAuthToken) {

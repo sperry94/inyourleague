@@ -1,0 +1,13 @@
+#titleWrapper {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 10%;
+}
+
+#enterSiteButtonWrapper{
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 10%;
+}

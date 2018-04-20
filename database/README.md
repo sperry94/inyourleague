@@ -13,3 +13,5 @@ This is the database for the inyourleague application.
 - https://stackoverflow.com/questions/35786679/how-to-declare-variable-and-assign-value-into-that-in-postgresql
 - https://stackoverflow.com/questions/1953326/how-to-call-a-function-postgresql
 - https://stackoverflow.com/questions/21662295/it-could-refer-to-either-a-pl-pgsql-variable-or-a-table-column
+- https://stackoverflow.com/questions/16964790/function-with-sql-query-has-no-destination-for-result-data
+- https://stackoverflow.com/questions/12328198/store-query-result-in-a-variable-using-in-pl-pgsql

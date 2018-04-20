@@ -1,6 +1,6 @@
 from node:carbon
 
-WORKDIR user/src/eventsvc
+WORKDIR user/src/accountsvc
 
 COPY package*.json ./
 
