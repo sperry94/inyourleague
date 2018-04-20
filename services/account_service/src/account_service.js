@@ -137,3 +137,5 @@ app.put('/', async (req, res) => {
 app.set('port', process.env.PORT || 8889);
 
 app.listen(app.get('port'), () => { console.log('Application started.'); });
+
+module.exports = app;
