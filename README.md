@@ -7,3 +7,9 @@ http://iyl-webapp.herokuapp.com/
 - Docker documentation
 - Heroku documentation
 - https://stackoverflow.com/questions/41322541/rebuild-docker-container-on-file-changes/41323079
+- https://en.wikipedia.org/wiki/Shell_script
+- https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwin9qOvrsjaAhWpx4MKHXoCDsAQFggpMAE&url=http%3A%2F%2Flinuxcommand.org%2Flc3_wss0120.php&usg=AOvVaw10_m0_JXgJliwGx3SyGw1v
+- https://stackoverflow.com/questions/16034749/bash-script-if-elif-else-statement-issues
+- http://tldp.org/LDP/Bash-Beginners-Guide/html/chap_07.html
+- https://stackoverflow.com/questions/4111475/how-to-do-a-logical-or-operation-in-shell-scripting
+- https://stackoverflow.com/questions/2237080/how-to-compare-strings-in-bash
