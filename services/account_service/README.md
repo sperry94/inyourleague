@@ -5,6 +5,10 @@ This is the service that handles account operations for the inyourleague applica
 ### References
 - Heroku PostgreSQL reference
 - Express documentation
+- Chai documentation
+- Mocha documentation
+- Sinon documentation
+- Proxyquest documentation
 - https://www.npmjs.com/package/cookie-parser
 - https://stackoverflow.com/questions/11517342/when-to-open-close-connection-to-database
 - https://stackoverflow.com/questions/6158933/how-to-make-an-http-post-request-in-node-js
@@ -16,3 +20,5 @@ This is the service that handles account operations for the inyourleague applica
 - https://stackoverflow.com/questions/42964102/syntax-for-async-arrow-function
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null
+- https://scotch.io/tutorials/test-a-node-restful-api-with-mocha-and-chai
+- https://github.com/brianc/node-postgres/issues/1056
