@@ -13,3 +13,5 @@ http://iyl-webapp.herokuapp.com/
 - http://tldp.org/LDP/Bash-Beginners-Guide/html/chap_07.html
 - https://stackoverflow.com/questions/4111475/how-to-do-a-logical-or-operation-in-shell-scripting
 - https://stackoverflow.com/questions/2237080/how-to-compare-strings-in-bash
+- https://stackoverflow.com/questions/27644586/how-to-set-up-travis-ci-with-multiple-languages
+- https://github.com/calebhsu/CoMake/blob/dev/.travis.yml
