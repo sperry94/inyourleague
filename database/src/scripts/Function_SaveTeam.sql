@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION save_account(teamkey_tosave UUID, userid_tosave TEXT, name_tosave TEXT)
+CREATE OR REPLACE FUNCTION save_team(teamkey_tosave UUID, userid_tosave TEXT, name_tosave TEXT)
 RETURNS UUID AS $$
 BEGIN
 

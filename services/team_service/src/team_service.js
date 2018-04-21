@@ -50,9 +50,33 @@ app.put('/', async (req, res) => {
     return;
   }
 
-  // save the team
+  if(req.body.Name == null || !(typeof(req.body.Name) === "string")) {
+    const msg = 'No team name was specified for the team to save.';
+    console.log(msg);
+    res.status(400).send(msg);
+    return;
+  }
 
-  res.sendStatus(200);
+  let queryRes;
+  try {
+    queryRes = await pgPool.query('SELECT save_team($1, $2, $3) as teamkey',
+      [req.body.Key, oauthInfoPayload.sub, req.body.Name]);
+  } catch(error) {
+    console.log(error);
+    res.status(500).send('An error occurred when trying to save the team.');
+    return;
+  }
+
+  if(!queryRes || !queryRes.rows || !queryRes.rows[0]
+    || !queryRes.rows[0].teamkey) {
+    console.log('The save account query returned null.');
+    res.status(500).send('An error occurred when trying to save the team.');
+    return;
+  }
+
+  res.status(200).send({
+    key: queryRes.rows[0].teamkey
+  });
 });
 
 app.set('port', process.env.PORT || 8890);
