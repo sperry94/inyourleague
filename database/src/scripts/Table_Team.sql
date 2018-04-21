@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS team(
+  key UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+	userid TEXT NOT NULL REFERENCES account(oauthid) ON DELETE CASCADE,
+	name TEXT NOT NULL
+);
