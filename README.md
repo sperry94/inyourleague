@@ -1,4 +1,7 @@
 # inyourleague
+
+[![Build Status](https://travis-ci.org/sperry94/inyourleague.svg?branch=master)](https://travis-ci.org/sperry94/inyourleague)
+
 A web app to help little league teams keep track of rosters, practice schedules, etc
 
 http://iyl-webapp.herokuapp.com/
@@ -15,3 +18,4 @@ http://iyl-webapp.herokuapp.com/
 - https://stackoverflow.com/questions/2237080/how-to-compare-strings-in-bash
 - https://stackoverflow.com/questions/27644586/how-to-set-up-travis-ci-with-multiple-languages
 - https://github.com/calebhsu/CoMake/blob/dev/.travis.yml
+- https://github.com/google/google-auth-library-nodejs
