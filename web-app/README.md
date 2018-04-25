@@ -30,3 +30,5 @@ This is the website for the inyourleague application
 - https://stackoverflow.com/questions/4206348/how-can-i-center-this-link
 - https://stackoverflow.com/questions/10336194/twitter-bootstrap-top-nav-bar-blocking-top-content-of-the-page
 - https://stackoverflow.com/questions/5805059/how-do-i-make-a-placeholder-for-a-select-box
+- https://stackoverflow.com/questions/3065067/how-do-i-set-bash-environment-variables-from-a-script
+- https://stackoverflow.com/questions/14032066/can-flask-have-optional-url-parameters

@@ -6,6 +6,7 @@ from werkzeug.contrib.fixers import ProxyFix
 
 account_service_endpoint = environ['IYL_ACCOUNT_SVC_ENDPOINT'].rstrip('/')
 event_service_endpoint = environ['IYL_EVENT_SVC_ENDPOINT'].rstrip('/')
+team_service_endpoint = environ['IYL_TEAM_SVC_ENDPOINT'].rstrip('/')
 
 app = Flask(__name__)
 app.secret_key = environ['FLASK_SECRET_KEY']
@@ -19,7 +20,6 @@ app.register_blueprint(make_google_blueprint(
 
 @app.before_request
 def before_request():
-    print(session)
     if request.endpoint == 'index' \
     or request.endpoint == 'google.login' \
     or request.endpoint == 'google.authorized' \
@@ -82,7 +82,7 @@ def logout():
 
 @app.route('/home', methods=['GET'])
 def home():
-    return render_template('home.html', submission=session.get('count', ''))
+    return render_template('home.html')
 
 @app.route('/account', methods=['GET'])
 def account_view():
@@ -112,9 +112,19 @@ def account_save():
 
     return redirect(url_for('home'))
 
-@app.route('/form_post', methods=['POST'])
-def form_submission():
-    submitted_input = request.form['text']
-    res = post(event_service_endpoint, data={'text':submitted_input})
-    session['count'] = res.json()['count']
+@app.route('/team', methods=['POST'])
+@app.route('/team/<uuid:teamkey>', methods=['POST'])
+def save_team(teamkey=None):
+    oauthToken = session.get('google_oauth_token',{}).get('id_token','')
+
+    team_name = request.form.get('name', None)
+
+    res = put(team_service_endpoint, \
+        cookies={'OAuthToken': oauthToken}, \
+        json={'Key': teamkey, 'Name': team_name})
+
+    if not res.ok:
+        print('The team save was unsuccessful.')
+        abort(500)
+
     return redirect(url_for('home'))

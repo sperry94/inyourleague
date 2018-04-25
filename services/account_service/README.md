@@ -22,3 +22,4 @@ This is the service that handles account operations for the inyourleague applica
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null
 - https://scotch.io/tutorials/test-a-node-restful-api-with-mocha-and-chai
 - https://github.com/brianc/node-postgres/issues/1056
+- https://stackoverflow.com/questions/4547672/return-multiple-fields-as-a-record-in-postgresql-with-pl-pgsql
