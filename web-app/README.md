@@ -32,3 +32,5 @@ This is the website for the inyourleague application
 - https://stackoverflow.com/questions/5805059/how-do-i-make-a-placeholder-for-a-select-box
 - https://stackoverflow.com/questions/3065067/how-do-i-set-bash-environment-variables-from-a-script
 - https://stackoverflow.com/questions/14032066/can-flask-have-optional-url-parameters
+- https://stackoverflow.com/questions/29451208/set-default-value-for-select-html-element-in-jinja-template
+- Code on https://getbootstrap.com/docs/4.0/components/navbar/

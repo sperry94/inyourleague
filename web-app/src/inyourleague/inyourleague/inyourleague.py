@@ -82,11 +82,49 @@ def logout():
 
 @app.route('/home', methods=['GET'])
 def home():
-    return render_template('home.html')
+    oauthToken = session.get('google_oauth_token',{}).get('id_token','')
+
+    account_res = get(account_service_endpoint, \
+        cookies={'OAuthToken': oauthToken})
+
+    if not account_res.ok:
+        print('The account lookup was unsuccessful.')
+        abort(500)
+
+    account_json = account_res.json()
+
+    if account_json is None or 'accounttype' not in account_json:
+        print('The account lookup result did not contain an account type.')
+        abort(500)
+
+    if account_json['accounttype'] == 0:
+        return render_template('coach_home.html')
+    elif account_json['accounttype'] == 1:
+        return render_template('parent_home.html')
+    else:
+        print('The account type was not supported.')
+        abort(500)
+
 
 @app.route('/account', methods=['GET'])
 def account_view():
-    return render_template('account.html')
+    oauthToken = session.get('google_oauth_token',{}).get('id_token','')
+
+    account_res = get(account_service_endpoint, \
+        cookies={'OAuthToken': oauthToken})
+
+    if not account_res.ok:
+        print('The account lookup was unsuccessful.')
+        abort(500)
+
+    account_json = account_res.json()
+
+    if account_json is None:
+        print('The account lookup result did not contain an account type.')
+        abort(500)
+
+    return render_template('account.html', \
+        accounttype=account_json.get('accounttype', ''))
 
 @app.route('/account', methods=['POST'])
 def account_save():
