@@ -8,11 +8,21 @@
 
 {% block body %}
 
-  <nav class="navbar fixed-top navbar-dark bg-primary">
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="/home">IYL</a>
-    <form action="logout" method="post">
-      <button class="btn btn-outline-light" type="submit">Logout</button>
-    </form>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#iylNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="iylNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/account">Account</a>
+        </li>
+      </ul>
+      <form class="form-inline" action="logout" method="post">
+        <button class="btn btn-outline-light" type="submit">Logout</button>
+      </form>
+    </div>
   </nav>
 
   {% block subbody %}{% endblock %}

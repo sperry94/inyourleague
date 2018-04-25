@@ -27,6 +27,13 @@ if [ "$#" -eq 0 ] || [ "$1" = "event" ] ; then
   cd ../../..
 fi
 
+# deploy team service
+if [ "$#" -eq 0 ] || [ "$1" = "team" ] ; then
+  cd services/team_service/src
+  heroku container:push web --app iyl-svc-team
+  cd ../../..
+fi
+
 # deploy web-app
 if [ "$#" -eq 0 ] || [ "$1" = "webapp" ] ; then
   cd web-app/src

@@ -10,11 +10,11 @@
     <div class="form-group">
       <label for="AccountType">Account Type:</label>
       <select class="form-control" name="AccountType" required>
-        <option value="0">Coach</option>
-        <option value="1">Parent</option>
+        <option value="0" {% if accounttype == 0 %}selected{% endif %}>Coach</option>
+        <option value="1" {% if accounttype == 1 %}selected{% endif %}>Parent</option>
       </select>
     </div>
-    <button class="btn btn-outline-primary float-right" type="submit">Create Account</button>
+    <button class="btn btn-outline-primary float-right" type="submit">Save Account</button>
   </form>
 </div>
 {% endblock %}
