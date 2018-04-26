@@ -13,3 +13,5 @@
 \i scripts/Function_SaveTeam.sql
 
 \i scripts/Function_GetTeam.sql
+
+\i scripts/Function_GetTeamList.sql

@@ -17,6 +17,60 @@ const pgPool = new pg.Pool({
 
 pgPool.connect();
 
+app.get('/list', async (req, res) => {
+
+  if(!req.cookies.OAuthToken) {
+    res.status(401).send('No auth token was provided.');
+    return;
+  }
+
+  let oauthInfo;
+  try {
+    oauthInfo = await googleOAuthClient.verifyIdToken({
+      idToken: req.cookies.OAuthToken,
+      audience: process.env.GOOGLE_OAUTH_CLIENT_ID
+    });
+  } catch(error) {
+    console.log(error);
+    res.status(401).send('An error occurred when trying to verify the auth token.');
+    return;
+  }
+
+  if(!oauthInfo){
+    console.log('Token verification result was null.');
+    res.status(401).send('Token could not be verified.');
+    return;
+  }
+
+  const oauthInfoPayload = oauthInfo.getPayload()
+
+  if(!oauthInfoPayload || !oauthInfoPayload.sub) {
+    console.log('Token verification payload or token ID was null.');
+    res.status(401).send('Token could not be verified.');
+    return;
+  }
+
+  let queryRes;
+  try {
+    queryRes = await pgPool.query('SELECT key, name FROM get_teamlist($1)',
+      [oauthInfoPayload.sub]);
+  } catch(error) {
+    console.log(error);
+    res.status(500).send('An error occurred when trying to lookup the team list.');
+    return;
+  }
+
+  if(!queryRes || !queryRes.rows) {
+    console.log('The lookup team list query returned null.');
+    res.status(500).send('An error occurred when trying to lookup the team list.');
+    return;
+  }
+
+  res.status(200).send({
+    teamlist: queryRes.rows
+  });
+});
+
 app.get('/:key', async (req, res) => {
 
   if(!req.cookies.OAuthToken) {

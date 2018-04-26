@@ -155,23 +155,47 @@ def account_save():
 
     return redirect(url_for('home'))
 
+@app.route('/team', methods=['GET'])
+@app.route('/team/<uuid:teamkey>', methods=['GET'])
+def teams(teamkey=None):
+    oauthToken = session.get('google_oauth_token',{}).get('id_token','')
 
-@app.route('/team', methods=['POST'])
-@app.route('/team/<uuid:teamkey>', methods=['POST'])
+    team_name = None
+    if teamkey is not None:
+        res = get(team_service_endpoint + '/' + str(teamkey), \
+            cookies={'OAuthToken': oauthToken})
+
+        if not res.ok:
+            print('The team lookup was unsuccessful.')
+            abort(500)
+
+        team = res.json()
+
+        if team is not None:
+            team_name = team.get('name', '')
+
+    return render_template('team.html', team_name = team_name)
+
+@app.route('/team', methods=['GET'])
+@app.route('/team/<uuid:teamkey>', methods=['GET'])
 def team_view(teamkey=None):
     oauthToken = session.get('google_oauth_token',{}).get('id_token','')
 
-    team_name = request.form.get('name', None)
+    team_name = None
+    if teamkey is not None:
+        res = get(team_service_endpoint + '/' + str(teamkey), \
+            cookies={'OAuthToken': oauthToken})
 
-    res = put(team_service_endpoint, \
-        cookies={'OAuthToken': oauthToken}, \
-        json={'Key': teamkey, 'Name': team_name})
+        if not res.ok:
+            print('The team lookup was unsuccessful.')
+            abort(500)
 
-    if not res.ok:
-        print('The team save was unsuccessful.')
-        abort(500)
+        team = res.json()
 
-    return redirect(url_for('home'))
+        if team is not None:
+            team_name = team.get('name', '')
+
+    return render_template('team.html', team_name = team_name)
 
 
 @app.route('/team', methods=['POST'])
