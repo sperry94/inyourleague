@@ -4,6 +4,8 @@
 
 \i scripts/Table_Team.sql
 
+i\ scripts/Table_Event.sql
+
 \i scripts/Function_SaveAccount.sql
 
 \i scripts/Function_AccountExists.sql
@@ -15,3 +17,5 @@
 \i scripts/Function_GetTeam.sql
 
 \i scripts/Function_GetTeamList.sql
+
+\i scripts/Function_GetEventList.sql
