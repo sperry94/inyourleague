@@ -17,27 +17,14 @@ const pgPool = new pg.Pool({
 
 pgPool.connect();
 
-app.get('/exists', async (req, res) => {
-  if(!req.cookies.OAuthToken) {
-    res.status(401).send('No auth token was provided.');
-    return;
-  }
-
-  let oauthInfo;
-  try {
-    oauthInfo = await googleOAuthClient.verifyIdToken({
-      idToken: req.cookies.OAuthToken,
-      audience: process.env.GOOGLE_OAUTH_CLIENT_ID
-    });
-  } catch(error) {
-    console.log(error);
-    res.status(401).send('An error occurred when trying to verify the auth token.');
-    return;
-  }
+const getGoogleIdFromToken = async (token) => {
+  const oauthInfo = await googleOAuthClient.verifyIdToken({
+    idToken: token,
+    audience: process.env.GOOGLE_OAUTH_CLIENT_ID
+  });
 
   if(!oauthInfo){
     console.log('Token verification result was null.');
-    res.status(401).send('Token could not be verified.');
     return;
   }
 
@@ -45,6 +32,29 @@ app.get('/exists', async (req, res) => {
 
   if(!oauthInfoPayload || !oauthInfoPayload.sub) {
     console.log('Token verification payload or token ID was null.');
+    return;
+  }
+
+  return oauthInfoPayload.sub;
+}
+
+app.get('/exists', async (req, res) => {
+
+  if(!req.cookies.OAuthToken) {
+    res.status(401).send('No auth token was provided.');
+    return;
+  }
+
+  let userId;
+  try {
+    userId = await getGoogleIdFromToken(req.cookies.OAuthToken);
+  } catch(error) {
+    console.log(error);
+    res.status(401).send('An error occurred when trying to verify the auth token.');
+    return;
+  }
+
+  if(!userId) {
     res.status(401).send('Token could not be verified.');
     return;
   }
@@ -52,7 +62,7 @@ app.get('/exists', async (req, res) => {
   let queryRes;
   try {
     queryRes = await pgPool.query('SELECT account_exists($1) as exists',
-      [oauthInfoPayload.sub]);
+      [userId]);
   } catch(error) {
     console.log(error);
     res.status(500).send('An error occurred when trying to check if the account exists.');
@@ -66,7 +76,7 @@ app.get('/exists', async (req, res) => {
   }
 
   if(!queryRes.rows[0].exists) {
-    console.log('account',oauthInfoPayload.sub, 'does not exist')
+    console.log('account',userId, 'does not exist')
     res.status(404).send('The account does not exist.');
     return;
   }
@@ -75,33 +85,22 @@ app.get('/exists', async (req, res) => {
 });
 
 app.get('/', async (req, res) => {
+
   if(!req.cookies.OAuthToken) {
     res.status(401).send('No auth token was provided.');
     return;
   }
 
-  let oauthInfo;
+  let userId;
   try {
-    oauthInfo = await googleOAuthClient.verifyIdToken({
-      idToken: req.cookies.OAuthToken,
-      audience: process.env.GOOGLE_OAUTH_CLIENT_ID
-    });
+    userId = await getGoogleIdFromToken(req.cookies.OAuthToken);
   } catch(error) {
     console.log(error);
     res.status(401).send('An error occurred when trying to verify the auth token.');
     return;
   }
 
-  if(!oauthInfo){
-    console.log('Token verification result was null.');
-    res.status(401).send('Token could not be verified.');
-    return;
-  }
-
-  const oauthInfoPayload = oauthInfo.getPayload()
-
-  if(!oauthInfoPayload || !oauthInfoPayload.sub) {
-    console.log('Token verification payload or token ID was null.');
+  if(!userId) {
     res.status(401).send('Token could not be verified.');
     return;
   }
@@ -109,7 +108,7 @@ app.get('/', async (req, res) => {
   let queryRes;
   try {
     queryRes = await pgPool.query('SELECT oauthid, accounttype FROM get_account($1) as (oauthid TEXT, accounttype INT)',
-      [oauthInfoPayload.sub]);
+      [userId]);
   } catch(error) {
     console.log(error);
     res.status(500).send('An error occurred when trying to lookup the account.');
@@ -132,28 +131,16 @@ app.put('/', async (req, res) => {
     return;
   }
 
-  let oauthInfo;
+  let userId;
   try {
-    oauthInfo = await googleOAuthClient.verifyIdToken({
-      idToken: req.cookies.OAuthToken,
-      audience: process.env.GOOGLE_OAUTH_CLIENT_ID
-    });
+    userId = await getGoogleIdFromToken(req.cookies.OAuthToken);
   } catch(error) {
     console.log(error);
     res.status(401).send('An error occurred when trying to verify the auth token.');
     return;
   }
 
-  if(!oauthInfo){
-    console.log('Token verification result was null.');
-    res.status(401).send('Token could not be verified.');
-    return;
-  }
-
-  const oauthInfoPayload = oauthInfo.getPayload()
-
-  if(!oauthInfoPayload || !oauthInfoPayload.sub) {
-    console.log('Token verification payload or token ID was null.');
+  if(!userId) {
     res.status(401).send('Token could not be verified.');
     return;
   }
@@ -168,7 +155,7 @@ app.put('/', async (req, res) => {
   let queryRes;
   try {
     queryRes = await pgPool.query('SELECT save_account($1, $2) as success',
-      [oauthInfoPayload.sub, req.body.AccountType]);
+      [userId, req.body.AccountType]);
   } catch(error) {
     console.log(error);
     res.status(500).send('An error occurred when trying to save the account.');

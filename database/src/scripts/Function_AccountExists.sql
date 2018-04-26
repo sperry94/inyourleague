@@ -1,4 +1,6 @@
-CREATE OR REPLACE FUNCTION account_exists(oauthid_tocheck TEXT)
+DROP FUNCTION IF EXISTS account_exists;
+
+CREATE FUNCTION account_exists(oauthid_tocheck TEXT)
 RETURNS BOOLEAN AS $$
 BEGIN
   IF EXISTS(SELECT 1 FROM account WHERE oauthid = oauthid_tocheck) THEN

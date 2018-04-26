@@ -1,4 +1,6 @@
-CREATE OR REPLACE FUNCTION get_team(oauthid_toget TEXT, teamkey_toget UUID)
+DROP FUNCTION IF EXISTS  get_team;
+
+CREATE FUNCTION get_team(oauthid_toget TEXT, teamkey_toget UUID)
 RETURNS RECORD AS $$
 DECLARE team_record RECORD;
 BEGIN

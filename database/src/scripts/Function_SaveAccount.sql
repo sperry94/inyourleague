@@ -1,4 +1,6 @@
-CREATE OR REPLACE FUNCTION save_account(oauthid_tosave TEXT, accounttype_tosave INTEGER)
+DROP FUNCTION IF EXISTS  save_account;
+
+CREATE FUNCTION save_account(oauthid_tosave TEXT, accounttype_tosave INTEGER)
 RETURNS BOOLEAN AS $$
 BEGIN
   INSERT INTO account(oauthid, accounttype)

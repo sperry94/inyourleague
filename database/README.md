@@ -17,3 +17,4 @@ This is the database for the inyourleague application.
 - https://stackoverflow.com/questions/12328198/store-query-result-in-a-variable-using-in-pl-pgsql
 - https://stackoverflow.com/questions/41548015/pl-pgsql-return-single-record-from-function
 - https://stackoverflow.com/questions/12505158/generating-a-uuid-in-postgres-for-insert-statement
+- https://dba.stackexchange.com/questions/148876/return-value-directly-from-insert-with-returning-clause

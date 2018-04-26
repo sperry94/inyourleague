@@ -15,6 +15,27 @@ const pgPool = new pg.Pool({
   ssl: true
 });
 
+const getGoogleIdFromToken = async (token) => {
+  const oauthInfo = await googleOAuthClient.verifyIdToken({
+    idToken: token,
+    audience: process.env.GOOGLE_OAUTH_CLIENT_ID
+  });
+
+  if(!oauthInfo){
+    console.log('Token verification result was null.');
+    return;
+  }
+
+  const oauthInfoPayload = oauthInfo.getPayload()
+
+  if(!oauthInfoPayload || !oauthInfoPayload.sub) {
+    console.log('Token verification payload or token ID was null.');
+    return;
+  }
+
+  return oauthInfoPayload.sub;
+}
+
 pgPool.connect();
 
 app.get('/list', async (req, res) => {
@@ -24,28 +45,16 @@ app.get('/list', async (req, res) => {
     return;
   }
 
-  let oauthInfo;
+  let userId;
   try {
-    oauthInfo = await googleOAuthClient.verifyIdToken({
-      idToken: req.cookies.OAuthToken,
-      audience: process.env.GOOGLE_OAUTH_CLIENT_ID
-    });
+    userId = await getGoogleIdFromToken(req.cookies.OAuthToken);
   } catch(error) {
     console.log(error);
     res.status(401).send('An error occurred when trying to verify the auth token.');
     return;
   }
 
-  if(!oauthInfo){
-    console.log('Token verification result was null.');
-    res.status(401).send('Token could not be verified.');
-    return;
-  }
-
-  const oauthInfoPayload = oauthInfo.getPayload()
-
-  if(!oauthInfoPayload || !oauthInfoPayload.sub) {
-    console.log('Token verification payload or token ID was null.');
+  if(!userId) {
     res.status(401).send('Token could not be verified.');
     return;
   }
@@ -53,7 +62,7 @@ app.get('/list', async (req, res) => {
   let queryRes;
   try {
     queryRes = await pgPool.query('SELECT key, name FROM get_teamlist($1)',
-      [oauthInfoPayload.sub]);
+      [userId]);
   } catch(error) {
     console.log(error);
     res.status(500).send('An error occurred when trying to lookup the team list.');
@@ -78,28 +87,16 @@ app.get('/:key', async (req, res) => {
     return;
   }
 
-  let oauthInfo;
+  let userId;
   try {
-    oauthInfo = await googleOAuthClient.verifyIdToken({
-      idToken: req.cookies.OAuthToken,
-      audience: process.env.GOOGLE_OAUTH_CLIENT_ID
-    });
+    userId = await getGoogleIdFromToken(req.cookies.OAuthToken);
   } catch(error) {
     console.log(error);
     res.status(401).send('An error occurred when trying to verify the auth token.');
     return;
   }
 
-  if(!oauthInfo){
-    console.log('Token verification result was null.');
-    res.status(401).send('Token could not be verified.');
-    return;
-  }
-
-  const oauthInfoPayload = oauthInfo.getPayload()
-
-  if(!oauthInfoPayload || !oauthInfoPayload.sub) {
-    console.log('Token verification payload or token ID was null.');
+  if(!userId) {
     res.status(401).send('Token could not be verified.');
     return;
   }
@@ -114,7 +111,7 @@ app.get('/:key', async (req, res) => {
   let queryRes;
   try {
     queryRes = await pgPool.query('SELECT key, userid, name FROM get_team($1, $2) as (key UUID, userid TEXT, name TEXT)',
-      [oauthInfoPayload.sub, req.params.key]);
+      [userId, req.params.key]);
   } catch(error) {
     console.log(error);
     res.status(500).send('An error occurred when trying to lookup the team.');
@@ -137,28 +134,16 @@ app.put('/', async (req, res) => {
     return;
   }
 
-  let oauthInfo;
+  let userId;
   try {
-    oauthInfo = await googleOAuthClient.verifyIdToken({
-      idToken: req.cookies.OAuthToken,
-      audience: process.env.GOOGLE_OAUTH_CLIENT_ID
-    });
+    userId = await getGoogleIdFromToken(req.cookies.OAuthToken);
   } catch(error) {
     console.log(error);
     res.status(401).send('An error occurred when trying to verify the auth token.');
     return;
   }
 
-  if(!oauthInfo){
-    console.log('Token verification result was null.');
-    res.status(401).send('Token could not be verified.');
-    return;
-  }
-
-  const oauthInfoPayload = oauthInfo.getPayload()
-
-  if(!oauthInfoPayload || !oauthInfoPayload.sub) {
-    console.log('Token verification payload or token ID was null.');
+  if(!userId) {
     res.status(401).send('Token could not be verified.');
     return;
   }
@@ -175,7 +160,7 @@ app.put('/', async (req, res) => {
   let queryRes;
   try {
     queryRes = await pgPool.query('SELECT save_team($1, $2, $3) as teamkey',
-      [req.body.Key, oauthInfoPayload.sub, req.body.Name]);
+      [req.body.Key, userId, req.body.Name]);
   } catch(error) {
     console.log(error);
     res.status(500).send('An error occurred when trying to save the team.');

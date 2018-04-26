@@ -1,4 +1,6 @@
-CREATE OR REPLACE FUNCTION get_account(oauthid_toget TEXT)
+DROP FUNCTION IF EXISTS get_account;
+
+CREATE FUNCTION get_account(oauthid_toget TEXT)
 RETURNS RECORD AS $$
 DECLARE account_record RECORD;
 BEGIN
