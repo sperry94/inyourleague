@@ -6,8 +6,8 @@ CREATE FUNCTION save_event(
     teamkey_tosave UUID,
     name_tosave TEXT,
     fullDay_tosave BOOLEAN,
-    startTime_tosave DATETIME,
-    endTime_tosave DATETIME)
+    startTime_tosave TIMESTAMP,
+    endTime_tosave TIMESTAMP)
 RETURNS UUID AS $$
 DECLARE saved_eventkey UUID;
 BEGIN
@@ -18,36 +18,37 @@ BEGIN
       AND team.key = teamkey_tosave
   )
   THEN
-    RETURN NULL
-  ENDIF
+    RETURN NULL;
+  ELSE
+    IF eventkey_tosave IS NULL THEN
+      eventkey_tosave := uuid_generate_v4();
+    END IF;
 
-  IF eventkey_tosave IS NULL THEN
-    eventkey_tosave := uuid_generate_v4();
+    INSERT INTO event(
+        key,
+        teamkey,
+        name,
+        fullDay,
+        startTime,
+        endTime)
+      VALUES (
+        eventkey_tosave,
+        teamkey_tosave,
+        name_tosave,
+        fullDay_tosave,
+        startTime_tosave,
+        endTime_tosave)
+    ON CONFLICT (key) DO UPDATE
+      SET
+        name = name_tosave,
+        fullDay = fullDay_tosave,
+        startTime = startTime_tosave,
+        endTime = endTime_tosave
+      WHERE event.teamkey = teamkey_tosave
+    RETURNING key INTO saved_eventkey;
+
+    RETURN saved_eventkey;
   END IF;
 
-  INSERT INTO event(
-      key,
-      teamkey,
-      name,
-      fullDay,
-      startTime,
-      endTime)
-    VALUES (
-      eventkey_tosave,
-      teamkey_tosave,
-      name_tosave,
-      fullDay_tosave
-      startTime_tosave,
-      endTime_tosave)
-  ON CONFLICT (key) DO UPDATE
-    SET
-      name = name_tosave,
-      fullDay = fullDay_tosave,
-      startTime = startTime_tosave,
-      endTime = endTime_tosave
-    WHERE event.teamkey = teamkey_tosave
-  RETURNING key INTO saved_eventkey;
-
-  RETURN saved_eventkey;
 END;
 $$ LANGUAGE plpgsql;
