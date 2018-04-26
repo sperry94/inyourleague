@@ -102,9 +102,23 @@ def home():
         abort(500)
 
     if account_json['accounttype'] == 0:
-        return render_template('coach_home.html')
+        res = get(team_service_endpoint + '/list', \
+            cookies={'OAuthToken': oauthToken})
+
+        teams = {}
+
+        if res.ok:
+            res_json = res.json()
+
+            if res_json:
+                teams = res_json
+
+        return render_template('coach_home.html', \
+            teams=res_json.get('teamlist', []))
+
     elif account_json['accounttype'] == 1:
         return render_template('parent_home.html')
+
     else:
         print('The account type was not supported.')
         abort(500)
@@ -155,33 +169,13 @@ def account_save():
 
     return redirect(url_for('home'))
 
-@app.route('/team', methods=['GET'])
-@app.route('/team/<uuid:teamkey>', methods=['GET'])
-def teams(teamkey=None):
-    oauthToken = session.get('google_oauth_token',{}).get('id_token','')
-
-    team_name = None
-    if teamkey is not None:
-        res = get(team_service_endpoint + '/' + str(teamkey), \
-            cookies={'OAuthToken': oauthToken})
-
-        if not res.ok:
-            print('The team lookup was unsuccessful.')
-            abort(500)
-
-        team = res.json()
-
-        if team is not None:
-            team_name = team.get('name', '')
-
-    return render_template('team.html', team_name = team_name)
 
 @app.route('/team', methods=['GET'])
 @app.route('/team/<uuid:teamkey>', methods=['GET'])
 def team_view(teamkey=None):
     oauthToken = session.get('google_oauth_token',{}).get('id_token','')
 
-    team_name = None
+    team_name = ''
     if teamkey is not None:
         res = get(team_service_endpoint + '/' + str(teamkey), \
             cookies={'OAuthToken': oauthToken})
@@ -195,7 +189,7 @@ def team_view(teamkey=None):
         if team is not None:
             team_name = team.get('name', '')
 
-    return render_template('team.html', team_name = team_name)
+    return render_template('team.html', team_key=teamkey, team_name=team_name)
 
 
 @app.route('/team', methods=['POST'])
@@ -205,9 +199,13 @@ def save_team(teamkey=None):
 
     team_name = request.form.get('name', None)
 
+    save_body = {'Name': team_name}
+
+    if teamkey:
+        save_body['Key'] = str(teamkey)
+
     res = put(team_service_endpoint, \
-        cookies={'OAuthToken': oauthToken}, \
-        json={'Key': teamkey, 'Name': team_name})
+        cookies={'OAuthToken': oauthToken}, json=save_body)
 
     if not res.ok:
         print('The team save was unsuccessful.')

@@ -9,6 +9,7 @@ This is the website for the inyourleague application
 - Flask-Dance (python package) documentation (http://flask-dance.readthedocs.io)
 - Bootstrap documentation
 - MDN documenation
+- Jinja documentation
 - https://stackoverflow.com/questions/43925487/how-to-run-gunicorn-on-docker
 - https://stackoverflow.com/questions/40454470/how-can-i-use-a-variable-inside-a-dockerfile-cmd
 - https://devcenter.heroku.com/articles/container-registry-and-runtime
@@ -34,3 +35,5 @@ This is the website for the inyourleague application
 - https://stackoverflow.com/questions/14032066/can-flask-have-optional-url-parameters
 - https://stackoverflow.com/questions/29451208/set-default-value-for-select-html-element-in-jinja-template
 - Code on https://getbootstrap.com/docs/4.0/components/navbar/
+- https://stackoverflow.com/questions/38320584/how-to-wrap-float-cards-in-bootstrap-4
+- https://stackoverflow.com/questions/4978738/is-there-a-python-equivalent-of-the-c-sharp-null-coalescing-operator
