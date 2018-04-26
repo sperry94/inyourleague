@@ -11,14 +11,7 @@ RETURNS TABLE(
 ) AS $$
 BEGIN
 
-  IF NOT EXISTS(
-    SELECT 1 FROM team
-    WHERE team.userid = userid_toget
-      AND team.key = teamkey_toget
-  )
-  THEN
-    RETURN QUERY SELECT NULL;
-  ELSE
+  IF teamkey_toget IS NULL THEN
     RETURN QUERY
       SELECT
         event.key,
@@ -28,10 +21,34 @@ BEGIN
         event.startTime,
         event.endTime
       FROM event
-      WHERE event.teamkey = teamkey_toget
+      JOIN team
+      ON event.teamkey = team.key
+      WHERE team.userid = userid_toget
       ORDER BY event.startTime ASC;
+
+      RETURN;
   END IF;
 
+  IF NOT EXISTS(
+    SELECT 1 FROM team
+    WHERE team.userid = userid_toget
+      AND team.key = teamkey_toget
+  )
+  THEN
+    RETURN;
+  END IF;
+
+  RETURN QUERY
+    SELECT
+      event.key,
+      event.teamkey,
+      event.name,
+      event.fullDay,
+      event.startTime,
+      event.endTime
+    FROM event
+    WHERE event.teamkey = teamkey_toget
+    ORDER BY event.startTime ASC;
+
 END;
-$$ LANGUAGE plpgsql
-RETURNS NULL ON NULL INPUT;
+$$ LANGUAGE plpgsql;
