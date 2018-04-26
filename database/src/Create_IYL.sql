@@ -11,3 +11,5 @@
 \i scripts/Function_GetAccount.sql
 
 \i scripts/Function_SaveTeam.sql
+
+\i scripts/Function_GetTeam.sql

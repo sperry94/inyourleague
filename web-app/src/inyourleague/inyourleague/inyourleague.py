@@ -18,6 +18,7 @@ app.register_blueprint(make_google_blueprint(
     scope=['profile']
 ), url_prefix='/login')
 
+
 @app.before_request
 def before_request():
     if request.endpoint == 'index' \
@@ -71,14 +72,17 @@ def before_request():
         else:
             abort(401)
 
+
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
+
 
 @app.route('/logout', methods=['POST'])
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
 
 @app.route('/home', methods=['GET'])
 def home():
@@ -126,6 +130,7 @@ def account_view():
     return render_template('account.html', \
         accounttype=account_json.get('accounttype', ''))
 
+
 @app.route('/account', methods=['POST'])
 def account_save():
     oauthToken = session.get('google_oauth_token',{}).get('id_token','')
@@ -149,6 +154,25 @@ def account_save():
         abort(500)
 
     return redirect(url_for('home'))
+
+
+@app.route('/team', methods=['POST'])
+@app.route('/team/<uuid:teamkey>', methods=['POST'])
+def team_view(teamkey=None):
+    oauthToken = session.get('google_oauth_token',{}).get('id_token','')
+
+    team_name = request.form.get('name', None)
+
+    res = put(team_service_endpoint, \
+        cookies={'OAuthToken': oauthToken}, \
+        json={'Key': teamkey, 'Name': team_name})
+
+    if not res.ok:
+        print('The team save was unsuccessful.')
+        abort(500)
+
+    return redirect(url_for('home'))
+
 
 @app.route('/team', methods=['POST'])
 @app.route('/team/<uuid:teamkey>', methods=['POST'])
