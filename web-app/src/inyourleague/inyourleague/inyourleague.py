@@ -1,7 +1,8 @@
-from flask import Flask, abort, render_template, request, redirect, session, url_for
+from flask import Flask, abort, jsonify, render_template, request, redirect, session, url_for
 from flask_dance.contrib.google import make_google_blueprint, google
 from os import environ
 from requests import get, post, put
+from secrets import token_hex
 from werkzeug.contrib.fixers import ProxyFix
 
 account_service_endpoint = environ['IYL_ACCOUNT_SVC_ENDPOINT'].rstrip('/')
@@ -17,6 +18,16 @@ app.register_blueprint(make_google_blueprint(
     redirect_to='home',
     scope=['profile']
 ), url_prefix='/login')
+
+
+# code from http://flask.pocoo.org/snippets/3/
+def csrf_token():
+    if 'csrf_token' not in session:
+        session['csrf_token'] = token_hex(32)
+    return session['csrf_token']
+
+# code from http://flask.pocoo.org/snippets/3/
+app.jinja_env.globals['csrf_token'] = csrf_token
 
 
 @app.before_request
@@ -51,7 +62,14 @@ def before_request():
         else:
             abort(401)
 
-    # add CSRF stuff here
+    # based on code from http://flask.pocoo.org/snippets/3/
+    if request.method == 'POST' or request.method == 'PUT':
+        csrf_tok_form = request.form.get('csrf_token', None)
+        csrf_tok_session = session.pop('csrf_token', None)
+
+        if csrf_tok_form is None or csrf_tok_session is None \
+        or csrf_tok_form != csrf_tok_session:
+            abort(400)
 
     if request.endpoint == 'account_view' \
     or request.endpoint == 'account_save':
@@ -209,6 +227,70 @@ def save_team(teamkey=None):
 
     if not res.ok:
         print('The team save was unsuccessful.')
+        abort(500)
+
+    return redirect(url_for('home'))
+
+@app.route('/events', methods=['GET'])
+def events():
+    oauthToken = session.get('google_oauth_token',{}).get('id_token','')
+
+    res = get(event_service_endpoint + '/team/', \
+        cookies={'OAuthToken': oauthToken})
+
+    if not res.ok:
+        print('The events lookup was unsuccessful.')
+        abort(500)
+
+    res_json = res.json()
+
+    if res_json is None:
+        print('The events lookup response was empty.')
+        abort(500)
+
+    event_list = res_json.get('eventlist', [])
+
+    mapped_event_list = []
+    for event in event_list:
+        print(event)
+        mapped_event_list.append({
+            'id': event.get('key', ''),
+            'title': event.get('name', ''),
+            'allDay': event.get('fullday', ''),
+            'start': event.get('starttime', ''),
+            'end': event.get('endtime', ''),
+        });
+
+    # NOTE LOOK INTO RETURNING LIST VULNERABILITY
+    return jsonify(mapped_event_list);
+
+@app.route('/event', methods=['POST'])
+@app.route('/event/<uuid:event>', methods=['POST'])
+def save_event(eventkey=None):
+    oauthToken = session.get('google_oauth_token',{}).get('id_token','')
+
+    event_team = request.form.get('team', None)
+    event_name = request.form.get('name', None)
+    event_fullday = request.form.get('fullDay', '').lower() == 'true'
+    event_start = request.form.get('startTime', None)
+    event_end = request.form.get('endTime', None)
+
+    save_body = {
+        'TeamKey': event_team,
+        'Name': event_name,
+        'FullDay': event_fullday,
+        'StartTime': event_start,
+        'EndTime': event_end
+    }
+
+    if eventkey:
+        save_body['Key'] = str(eventkey)
+
+    res = put(event_service_endpoint, \
+        cookies={'OAuthToken': oauthToken}, json=save_body)
+
+    if not res.ok:
+        print('The event save was unsuccessful.')
         abort(500)
 
     return redirect(url_for('home'))

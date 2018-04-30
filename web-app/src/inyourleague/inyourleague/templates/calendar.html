@@ -1,0 +1,126 @@
+{% extends 'layouts/navbar_layout.html' %}
+
+{% block substylesheets %}
+  <!-- From fontawesome website -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+
+  <!--From tempus dominus website-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha18/css/tempusdominus-bootstrap-4.min.css" />
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='third-party/fullcalendar/fullcalendar.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/calendar_style.css') }}">
+{% endblock %}
+
+{% block subbody %}
+
+  <div id="content" class="container">
+    <div id="contentrow" class="row">
+      <div class="col-md-9">
+        <div id="loadingIndicator">
+          <p>Calendar is loading...</p>
+        </div>
+        <div id="calendarSection" style="display: none">
+        </div>
+      </div>
+
+
+      <div id="teamList" class="col-md-3">
+
+        <h2>Teams</h2>
+
+        {% if teams %}
+
+          <div class="card-columns" id="teamCards">
+
+
+
+              {% for team in teams %}
+
+                  <div class="card teamcard" data-key="{{ team.key }}">
+                    <div class="card-body">
+                      <!-- inspired by bootstrap documentation -->
+                      <h5 class="card-title">{{team.name}}</h5>
+                      <a class="btn btn-outline-primary" href="/team/{{team.key}}">Edit</a>
+                    </div>
+                  </div>
+
+              {% endfor %}
+
+            {% block endcard %} {% endblock %}
+
+          </div>
+
+        {% else %}
+
+          <p>No teams have been associated with this user.</p>
+
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div id="createEventModal" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Create an Event</h4>
+        </div>
+        <div class="modal-body">
+          <form action="/event" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="form-group">
+              <label for="team">Team:</label>
+              <select class="form-control" type="text" name="team">
+                {% if teams %}
+                  {% for team in teams %}
+                    <option value="{{ team.key }}">{{ team.name }}</option>
+                  {% endfor %}
+                {% endif %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="name">Event Name:</label>
+              <input class="form-control" type="text" name="name"/>
+            </div>
+            <div class="form-group">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="fullDay"/>
+                <label class="form-check-label" for="name">Full Day</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="startTime">Event Start Time:</label>
+              <div class="input-group date iyl-datetimepicker" id="startTimePicker" data-target-input="nearest">
+                <input id="startTimeInput" class="form-control datetimepicker-input" type="text" name="startTime" data-target="#startTimePicker"/>
+                <div class="input-group-append" data-target="#startTimePicker" data-toggle="datetimepicker">
+                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="endTime">Event End Time:</label>
+              <div class="input-group date iyl-datetimepicker" id="endTimePicker" data-target-input="nearest">
+                <input id="endTimeInput" class="form-control datetimepicker-input" type="text" name="endTime" data-target="#endTimePicker"/>
+                <div class="input-group-append" data-target="#endTimePicker" data-toggle="datetimepicker">
+                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-outline-primary float-right" type="submit">Create event</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='third-party/moment/moment.min.js') }}"></script>
+
+<!--From tempus dominus website-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha18/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<script src="{{ url_for('static', filename='third-party/fullcalendar/fullcalendar.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/calendar_setup.js') }}"></script>
+{% endblock %}

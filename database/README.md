@@ -18,3 +18,5 @@ This is the database for the inyourleague application.
 - https://stackoverflow.com/questions/41548015/pl-pgsql-return-single-record-from-function
 - https://stackoverflow.com/questions/12505158/generating-a-uuid-in-postgres-for-insert-statement
 - https://dba.stackexchange.com/questions/148876/return-value-directly-from-insert-with-returning-clause
+- https://stackoverflow.com/questions/48246201/return-an-empty-table-with-n-columns-in-postgres
+- https://stackoverflow.com/questions/23465429/printing-a-value-of-a-variable-in-postgresql

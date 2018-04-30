@@ -155,8 +155,6 @@ app.put('/', async (req, res) => {
     return;
   }
 
-  // NEED TO PREVENT WRITING OVER OTHER USER'S INFO
-
   let queryRes;
   try {
     queryRes = await pgPool.query('SELECT save_team($1, $2, $3) as teamkey',

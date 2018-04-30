@@ -7,6 +7,8 @@
 {% block subbody %}
   <div id="accountFormWrapper">
     <form action="/account" method="post">
+      <!-- based on code from http://flask.pocoo.org/snippets/3/ -->
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="form-group">
         <label for="AccountType">Account Type:</label>
         <select class="form-control" name="AccountType" required>

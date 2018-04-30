@@ -9,3 +9,4 @@ This is the service that handles event operations for the inyourleague applicati
 - https://devcenter.heroku.com/articles/getting-started-with-nodejs#push-local-changes
 -  https://stackoverflow.com/questions/44548074/how-do-i-expose-ports-on-heroku-with-a-dockerfile
 - https://devcenter.heroku.com/articles/container-registry-and-runtime#dockerfile-commands-and-runtime
+- https://stackoverflow.com/questions/6784753/passing-route-control-with-optional-parameter-after-root-in-express
