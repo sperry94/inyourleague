@@ -1,8 +1,12 @@
-#teamList {
-  margin-left: 10%;
-  margin-right: 10%;
+#content, #contentrow {
+  height: 100%;
 }
 
 #teamCards {
-  margin-top: 25px;
+  margin-top: 15px;
+  column-count: 1;
+}
+
+.teamcard {
+  cursor: pointer;
 }

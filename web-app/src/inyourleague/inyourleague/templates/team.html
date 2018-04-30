@@ -9,6 +9,8 @@
   <div id="teamFormWrapper">
     <form action="/team{% if team_key %}/{{team_key}}{% endif %}"
       method="post">
+      <!-- based on code from http://flask.pocoo.org/snippets/3/ -->
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <div class="form-group">
         <label for="name">Team Name:</label>
         <input class="form-control" type="text" name="name" value="{{team_name}}" >

@@ -1,50 +1,67 @@
 {% extends 'layouts/navbar_layout.html' %}
 
 {% block substylesheets %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='third-party/fullcalendar/fullcalendar.min.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/coach_home_style.css') }}">
 {% endblock %}
 
 {% block subbody %}
 
-
-  <div id="teamList">
-
-    <h2>Teams</h2>
-
-    <div class="card-columns" id="teamCards">
-
-      {% if teams %}
-
-          {% for team in teams %}
-
-            <div class="card">
-              <div class="card-body">
-                <!-- inspired by bootstrap documentation -->
-                <h5 class="card-title">{{team.name}}</h5>
-                <a class="btn btn-outline-primary" href="/team/{{team.key}}">Edit</a>
-              </div>
-            </div>
-
-          {% endfor %}
-
-      {% endif %}
-
-      <div class="card">
-        <div class="card-body">
-          <!-- inspired by bootstrap documentation -->
-          <h5 class="card-title">Add a Team</h5>
-          <form action="/team" method="post">
-            <div class="form-group">
-              <label for="name">Team Name:</label>
-              <input class="form-control" type="text" name="name"/>
-            </div>
-            <button class="btn btn-outline-primary" type="submit">Create team</button>
-          </form>
-        </div>
+  <div id="content" class="container">
+    <div id="contentrow" class="row">
+      <div id="calendarSection" class="col-md-9">
       </div>
 
-    </div>
 
+      <div id="teamList" class="col-md-3">
+
+        <h2>Teams</h2>
+
+        <div class="card-columns" id="teamCards">
+
+          {% if teams %}
+
+              {% for team in teams %}
+
+                <div class="card teamcard">
+                  <div class="card-body">
+                    <!-- inspired by bootstrap documentation -->
+                    <h5 class="card-title">{{team.name}}</h5>
+                    <a class="btn btn-outline-primary" href="/team/{{team.key}}">Edit</a>
+                  </div>
+                </div>
+
+              {% endfor %}
+
+          {% endif %}
+
+          <div class="card">
+            <div class="card-body">
+              <!-- inspired by bootstrap documentation -->
+              <h5 class="card-title">Add a Team</h5>
+              <form action="/team" method="post">
+                <!-- based on code from http://flask.pocoo.org/snippets/3/ -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <div class="form-group">
+                  <label for="name">Team Name:</label>
+                  <input class="form-control" type="text" name="name"/>
+                </div>
+                <button class="btn btn-outline-primary" type="submit">Create team</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
   </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='third-party/moment/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='third-party/fullcalendar/fullcalendar.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/calendar_setup.js') }}"></script>
+<script src="{{ url_for('static', filename='js/coach_home.js') }}"></script>
 {% endblock %}

@@ -2,6 +2,7 @@ from flask import Flask, abort, render_template, request, redirect, session, url
 from flask_dance.contrib.google import make_google_blueprint, google
 from os import environ
 from requests import get, post, put
+from secrets import token_hex
 from werkzeug.contrib.fixers import ProxyFix
 
 account_service_endpoint = environ['IYL_ACCOUNT_SVC_ENDPOINT'].rstrip('/')
@@ -17,6 +18,16 @@ app.register_blueprint(make_google_blueprint(
     redirect_to='home',
     scope=['profile']
 ), url_prefix='/login')
+
+
+# code from http://flask.pocoo.org/snippets/3/
+def csrf_token():
+    if 'csrf_token' not in session:
+        session['csrf_token'] = token_hex(32)
+    return session['csrf_token']
+
+# code from http://flask.pocoo.org/snippets/3/
+app.jinja_env.globals['csrf_token'] = csrf_token
 
 
 @app.before_request
@@ -51,7 +62,14 @@ def before_request():
         else:
             abort(401)
 
-    # add CSRF stuff here
+    # based on code from http://flask.pocoo.org/snippets/3/
+    if request.method == 'POST' or request.method == 'PUT':
+        csrf_tok_form = request.form.get('csrf_token', None)
+        csrf_tok_session = session.pop('csrf_token', None)
+
+        if csrf_tok_form is None or csrf_tok_session is None \
+        or csrf_tok_form != csrf_tok_session:
+            abort(400)
 
     if request.endpoint == 'account_view' \
     or request.endpoint == 'account_save':

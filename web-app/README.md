@@ -37,3 +37,5 @@ This is the website for the inyourleague application
 - Code on https://getbootstrap.com/docs/4.0/components/navbar/
 - https://stackoverflow.com/questions/38320584/how-to-wrap-float-cards-in-bootstrap-4
 - https://stackoverflow.com/questions/4978738/is-there-a-python-equivalent-of-the-c-sharp-null-coalescing-operator
+- https://stackoverflow.com/questions/7357818/how-can-an-html-element-fill-out-100-of-the-remaining-screen-height-using-css
+- https://stackoverflow.com/questions/3087975/how-can-i-make-the-cursor-a-hand-when-a-user-hovers-over-a-list-item
