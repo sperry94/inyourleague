@@ -230,3 +230,34 @@ def save_team(teamkey=None):
         abort(500)
 
     return redirect(url_for('home'))
+
+@app.route('/event', methods=['POST'])
+@app.route('/event/<uuid:event>', methods=['POST'])
+def save_event(eventkey=None):
+    oauthToken = session.get('google_oauth_token',{}).get('id_token','')
+
+    event_team = request.form.get('team', None)
+    event_name = request.form.get('name', None)
+    event_fullday = request.form.get('fullDay', False)
+    event_start = request.form.get('startTime', None)
+    event_end = request.form.get('endTime', None)
+
+    save_body = {
+        'TeamKey': event_team,
+        'Name': event_name,
+        'FullDay': event_fullday,
+        'StartTime': event_start,
+        'EndTime': event_end
+    }
+
+    if eventkey:
+        save_body['Key'] = str(eventkey)
+
+    res = put(event_service_endpoint, \
+        cookies={'OAuthToken': oauthToken}, json=save_body)
+
+    if not res.ok:
+        print('The event save was unsuccessful.')
+        abort(500)
+
+    return redirect(url_for('home'))

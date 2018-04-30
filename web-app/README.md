@@ -10,6 +10,8 @@ This is the website for the inyourleague application
 - Bootstrap documentation
 - MDN documenation
 - Jinja documentation
+- Full Calendar documentation
+- Tempus Dominus documentation
 - https://stackoverflow.com/questions/43925487/how-to-run-gunicorn-on-docker
 - https://stackoverflow.com/questions/40454470/how-can-i-use-a-variable-inside-a-dockerfile-cmd
 - https://devcenter.heroku.com/articles/container-registry-and-runtime
@@ -39,3 +41,7 @@ This is the website for the inyourleague application
 - https://stackoverflow.com/questions/4978738/is-there-a-python-equivalent-of-the-c-sharp-null-coalescing-operator
 - https://stackoverflow.com/questions/7357818/how-can-an-html-element-fill-out-100-of-the-remaining-screen-height-using-css
 - https://stackoverflow.com/questions/3087975/how-can-i-make-the-cursor-a-hand-when-a-user-hovers-over-a-list-item
+- https://stackoverflow.com/questions/7337814/jinja2-load-template-file-from-template
+- https://stackoverflow.com/questions/21729864/jinja2-how-to-use-named-blocks-inside-included-templates-inside-extendable-tem
+- https://stackoverflow.com/questions/42469800/select-from-dropdown-list-in-flask
+
