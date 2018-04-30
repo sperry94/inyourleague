@@ -28,10 +28,10 @@ $(function() {
       }
 
       if(eventObject.start)
-        popoverOptions.content += eventObject.start.format('hh:mm A') + ' - ';
+        popoverOptions.content += eventObject.start.format('MM/DD hh:mm A') + ' - ';
 
       if(eventObject.end)
-        popoverOptions.content += eventObject.end.format('hh:mm A');
+        popoverOptions.content += eventObject.end.format('MM/DD hh:mm A');
 
       $eventElement.popover(popoverOptions);
     },
