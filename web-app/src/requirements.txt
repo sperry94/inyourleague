@@ -3,4 +3,3 @@ Flask-Dance
 Requests
 Gunicorn
 werkzeug
-secrets

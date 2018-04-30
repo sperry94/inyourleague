@@ -8,7 +8,6 @@ setup(
         'flask',
         'requests',
         'Flask-Dance',
-        'werkzeug',
-        'secrets'
+        'werkzeug'
     ]
 )
