@@ -2,3 +2,9 @@ CREATE TABLE IF NOT EXISTS account(
 	oauthid TEXT PRIMARY KEY,
 	accounttype INTEGER NOT NULL
 );
+
+ALTER TABLE account ADD COLUMN IF NOT EXISTS firstname TEXT;
+
+ALTER TABLE account ADD COLUMN IF NOT EXISTS lastname TEXT;
+
+ALTER TABLE account ADD COLUMN IF NOT EXISTS sharecode UUID NOT NULL DEFAULT uuid_generate_v4();

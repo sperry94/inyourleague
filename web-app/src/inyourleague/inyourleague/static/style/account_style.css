@@ -1,5 +1,9 @@
-#accountFormWrapper {
+#accountWrapper {
   display: block;
   margin: auto;
   width: 25%;
+}
+
+#sharecode {
+  cursor: pointer;
 }

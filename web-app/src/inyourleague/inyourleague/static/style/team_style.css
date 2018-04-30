@@ -1,5 +1,9 @@
-#teamFormWrapper {
+#content {
   display: block;
   margin: auto;
   width: 25%;
+}
+
+#teamForm {
+  margin-bottom: 20px;
 }

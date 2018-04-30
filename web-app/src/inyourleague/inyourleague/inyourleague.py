@@ -123,16 +123,16 @@ def home():
         res = get(team_service_endpoint + '/list', \
             cookies={'OAuthToken': oauthToken})
 
-        teams = {}
+        teams = []
 
         if res.ok:
             res_json = res.json()
 
             if res_json:
-                teams = res_json
+                teams = res_json.get('teamlist', [])
 
         return render_template('coach_home.html', \
-            teams=res_json.get('teamlist', []))
+            teams=teams)
 
     elif account_json['accounttype'] == 1:
         return render_template('parent_home.html')
@@ -160,7 +160,10 @@ def account_view():
         abort(500)
 
     return render_template('account.html', \
-        accounttype=account_json.get('accounttype', ''))
+        accounttype=account_json.get('accounttype', ''), \
+        firstname=account_json.get('firstname', ''), \
+        lastname=account_json.get('lastname', ''), \
+        sharecode=account_json.get('sharecode', ''))
 
 
 @app.route('/account', methods=['POST'])
@@ -178,8 +181,20 @@ def account_save():
         print(error)
         abort(500)
 
+    firstname = request.form.get('FirstName', None)
+
+    if not firstname:
+        print('No first name was provided.')
+        abort(500)
+
+    lastname = request.form.get('LastName', None)
+
+    if not lastname:
+        print('No last name was provided.')
+        abort(500)
+
     save_res = put(account_service_endpoint, \
-        cookies={'OAuthToken': oauthToken}, json={'AccountType': accountType})
+        cookies={'OAuthToken': oauthToken}, json={'AccountType': accountType, 'FirstName': firstname, 'LastName': lastname})
 
     if not save_res.ok:
         print('The account save was unsuccessful.')
@@ -231,6 +246,21 @@ def save_team(teamkey=None):
 
     return redirect(url_for('home'))
 
+
+@app.route('/shareteam/<uuid:teamkey>', methods=['POST'])
+def share_team(teamkey=None):
+    oauthToken = session.get('google_oauth_token',{}).get('id_token','')
+
+    res = put(team_service_endpoint + '/share/' + str(teamkey), \
+        cookies={'OAuthToken': oauthToken}, json={'ShareCode': request.form.get('sharecode', None)})
+
+    if not res.ok:
+        print('The team share was unsuccessful.')
+        abort(500)
+
+    return redirect(url_for('home'))
+
+
 @app.route('/events', methods=['GET'])
 def events():
     oauthToken = session.get('google_oauth_token',{}).get('id_token','')
@@ -252,7 +282,6 @@ def events():
 
     mapped_event_list = []
     for event in event_list:
-        print(event)
         mapped_event_list.append({
             'id': event.get('key', ''),
             'title': event.get('name', ''),
@@ -263,6 +292,7 @@ def events():
 
     # NOTE LOOK INTO RETURNING LIST VULNERABILITY
     return jsonify(mapped_event_list);
+
 
 @app.route('/event', methods=['POST'])
 @app.route('/event/<uuid:event>', methods=['POST'])

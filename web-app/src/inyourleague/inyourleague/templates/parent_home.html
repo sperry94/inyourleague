@@ -1,1 +1,17 @@
 {% extends 'calendar.html' %}
+
+{% block substylesheets2 %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/parent_home_style.css') }}">
+{% endblock %}
+
+{% block subbody %}
+
+  <div id="parentcontent">
+    <div id="loadingIndicator">
+      <p>Calendar is loading...</p>
+    </div>
+    <div id="calendarSection" style="display: none">
+    </div>
+  </div>
+
+{% endblock %}

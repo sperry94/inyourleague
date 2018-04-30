@@ -62,17 +62,4 @@ $(function() {
     unselectCancel: '.fc-createEventButton-button, #createEventModal *',
     themeSystem: 'bootstrap4'
   });
-
-  $('.teamcard').click(function (e) {
-    const $selectedTeamCard = $(e.target).closest('.teamcard');
-
-    const alreadySelected = $selectedTeamCard.hasClass('border-dark');
-
-    $('.teamcard').removeClass('border-dark');
-
-    // show the events for that team only
-
-    if(!alreadySelected)
-      $selectedTeamCard.addClass('border-dark');
-  });
 });
