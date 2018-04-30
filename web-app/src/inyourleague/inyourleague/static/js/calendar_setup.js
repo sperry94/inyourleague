@@ -28,10 +28,10 @@ $(function() {
       }
 
       if(eventObject.start)
-        popoverOptions.content += eventObject.start.format('hh:mm A') + ' - ';
+        popoverOptions.content += eventObject.start.format('MM/DD hh:mm A') + ' - ';
 
       if(eventObject.end)
-        popoverOptions.content += eventObject.end.format('hh:mm A');
+        popoverOptions.content += eventObject.end.format('MM/DD hh:mm A');
 
       $eventElement.popover(popoverOptions);
     },
@@ -61,18 +61,5 @@ $(function() {
     },
     unselectCancel: '.fc-createEventButton-button, #createEventModal *',
     themeSystem: 'bootstrap4'
-  });
-
-  $('.teamcard').click(function (e) {
-    const $selectedTeamCard = $(e.target).closest('.teamcard');
-
-    const alreadySelected = $selectedTeamCard.hasClass('border-dark');
-
-    $('.teamcard').removeClass('border-dark');
-
-    // show the events for that team only
-
-    if(!alreadySelected)
-      $selectedTeamCard.addClass('border-dark');
   });
 });

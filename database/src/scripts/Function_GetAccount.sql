@@ -4,7 +4,7 @@ CREATE FUNCTION get_account(oauthid_toget TEXT)
 RETURNS RECORD AS $$
 DECLARE account_record RECORD;
 BEGIN
-  account_record := (SELECT (oauthid, accounttype) FROM account
+  account_record := (SELECT (oauthid, accounttype, firstname, lastname, sharecode) FROM account
     WHERE oauthid = oauthid_toget);
 
   RETURN account_record;

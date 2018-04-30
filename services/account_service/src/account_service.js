@@ -107,7 +107,7 @@ app.get('/', async (req, res) => {
 
   let queryRes;
   try {
-    queryRes = await pgPool.query('SELECT oauthid, accounttype FROM get_account($1) as (oauthid TEXT, accounttype INT)',
+    queryRes = await pgPool.query('SELECT oauthid, accounttype, firstname, lastname, sharecode FROM get_account($1) as (oauthid TEXT, accounttype INT, firstname TEXT, lastname TEXT, sharecode UUID)',
       [userId]);
   } catch(error) {
     console.log(error);
@@ -152,10 +152,24 @@ app.put('/', async (req, res) => {
     return;
   }
 
+  if(req.body.FirstName == null) {
+    const msg = 'No first name was specified for the account to save.';
+    console.log(msg);
+    res.status(400).send(msg);
+    return;
+  }
+
+  if(req.body.LastName == null) {
+    const msg = 'No last name was specified for the account to save.';
+    console.log(msg);
+    res.status(400).send(msg);
+    return;
+  }
+
   let queryRes;
   try {
-    queryRes = await pgPool.query('SELECT save_account($1, $2) as success',
-      [userId, req.body.AccountType]);
+    queryRes = await pgPool.query('SELECT save_account($1, $2, $3, $4) as success',
+      [userId, req.body.AccountType, req.body.FirstName, req.body.LastName]);
   } catch(error) {
     console.log(error);
     res.status(500).send('An error occurred when trying to save the account.');

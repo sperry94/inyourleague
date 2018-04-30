@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block subbody %}
-  <div id="accountFormWrapper">
+  <div id="accountWrapper">
     <form action="/account" method="post">
       <!-- based on code from http://flask.pocoo.org/snippets/3/ -->
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -16,7 +16,29 @@
           <option value="1" {% if accounttype == 1 %}selected{% endif %}>Parent</option>
         </select>
       </div>
+      <div class="form-group">
+        <label for="FirstName">First Name:</label>
+        <input class="form-control" type="text" name="FirstName" value="{{ firstname }}" required />
+      </div>
+      <div class="form-group">
+        <label for="LastName">Last Name:</label>
+        <input class="form-control" type="text" name="LastName" value="{{ lastname }}" required />
+      </div>
+
+      <div id="sharecode">
+        <p><strong>Share Code:</strong><br/>{{ sharecode }}</p>
+      </div>
+
       <button class="btn btn-outline-primary float-right" type="submit">Save Account</button>
     </form>
   </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $('#sharecode').popover({
+      title: 'This is your sharecode',
+      content: 'Give this code to your coach so he/she can add you to their team. NOTE: Don\'t share this code with just anyone.'
+    });
+  </script>
 {% endblock %}

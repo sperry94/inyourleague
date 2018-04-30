@@ -127,6 +127,54 @@ app.get('/:key', async (req, res) => {
   res.status(200).send(queryRes.rows[0]);
 });
 
+app.put('/share/:teamkey', async (req, res) => {
+
+  if(!req.cookies.OAuthToken) {
+    res.status(401).send('No auth token was provided.');
+    return;
+  }
+
+  let userId;
+  try {
+    userId = await getGoogleIdFromToken(req.cookies.OAuthToken);
+  } catch(error) {
+    console.log(error);
+    res.status(401).send('An error occurred when trying to verify the auth token.');
+    return;
+  }
+
+  if(!userId) {
+    res.status(401).send('Token could not be verified.');
+    return;
+  }
+
+  if(req.body.ShareCode == null || !(typeof(req.body.ShareCode) === "string")) {
+    const msg = 'No share code was specified for the user to share the team with.';
+    console.log(msg);
+    res.status(400).send(msg);
+    return;
+  }
+
+  let queryRes;
+  try {
+    queryRes = await pgPool.query('SELECT share_team($1, $2, $3) as success',
+      [userId, req.body.ShareCode, req.params.teamkey]);
+  } catch(error) {
+    console.log(error);
+    res.status(500).send('An error occurred when trying to share the team.');
+    return;
+  }
+
+  if(!queryRes || !queryRes.rows || !queryRes.rows[0]
+    || !queryRes.rows[0].success) {
+    console.log('The share team query returned null.');
+    res.status(500).send('An error occurred when trying to share the team.');
+    return;
+  }
+
+  res.sendStatus(200);
+});
+
 app.put('/', async (req, res) => {
 
   if(!req.cookies.OAuthToken) {
