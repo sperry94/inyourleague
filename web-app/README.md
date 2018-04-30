@@ -44,4 +44,7 @@ This is the website for the inyourleague application
 - https://stackoverflow.com/questions/7337814/jinja2-load-template-file-from-template
 - https://stackoverflow.com/questions/21729864/jinja2-how-to-use-named-blocks-inside-included-templates-inside-extendable-tem
 - https://stackoverflow.com/questions/42469800/select-from-dropdown-list-in-flask
+- https://stackoverflow.com/questions/24868086/what-is-the-practical-application-of-bool-in-python
+- https://stackoverflow.com/questions/715417/converting-from-a-string-to-boolean-in-python
+- https://stackoverflow.com/questions/319426/how-do-i-do-a-case-insensitive-string-comparison
 

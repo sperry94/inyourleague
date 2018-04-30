@@ -1,4 +1,4 @@
-from flask import Flask, abort, render_template, request, redirect, session, url_for
+from flask import Flask, abort, jsonify, render_template, request, redirect, session, url_for
 from flask_dance.contrib.google import make_google_blueprint, google
 from os import environ
 from requests import get, post, put
@@ -231,6 +231,39 @@ def save_team(teamkey=None):
 
     return redirect(url_for('home'))
 
+@app.route('/events', methods=['GET'])
+def events():
+    oauthToken = session.get('google_oauth_token',{}).get('id_token','')
+
+    res = get(event_service_endpoint + '/team/', \
+        cookies={'OAuthToken': oauthToken})
+
+    if not res.ok:
+        print('The events lookup was unsuccessful.')
+        abort(500)
+
+    res_json = res.json()
+
+    if res_json is None:
+        print('The events lookup response was empty.')
+        abort(500)
+
+    event_list = res_json.get('eventlist', [])
+
+    mapped_event_list = []
+    for event in event_list:
+        print(event)
+        mapped_event_list.append({
+            'id': event.get('key', ''),
+            'title': event.get('name', ''),
+            'allDay': event.get('fullday', ''),
+            'start': event.get('starttime', ''),
+            'end': event.get('endtime', ''),
+        });
+
+    # NOTE LOOK INTO RETURNING LIST VULNERABILITY
+    return jsonify(mapped_event_list);
+
 @app.route('/event', methods=['POST'])
 @app.route('/event/<uuid:event>', methods=['POST'])
 def save_event(eventkey=None):
@@ -238,7 +271,7 @@ def save_event(eventkey=None):
 
     event_team = request.form.get('team', None)
     event_name = request.form.get('name', None)
-    event_fullday = request.form.get('fullDay', False)
+    event_fullday = request.form.get('fullDay', '').lower() == 'true'
     event_start = request.form.get('startTime', None)
     event_end = request.form.get('endTime', None)
 

@@ -19,9 +19,35 @@ $(function() {
         }
       }
     },
+    // NOTE LOOK INTO THE JSON GET VULNERABILITY
+    events: '/events',
+    eventRender: function (eventObject, $eventElement) {
+      const popoverOptions = {
+        title: eventObject.title,
+        content: ''
+      }
+
+      if(eventObject.start)
+        popoverOptions.content += eventObject.start.format('hh:mm A') + ' - ';
+
+      if(eventObject.end)
+        popoverOptions.content += eventObject.end.format('hh:mm A');
+
+      $eventElement.popover(popoverOptions);
+    },
     header : {
       left: 'title',
       right: 'createEventButton today, prev,next'
+    },
+    loading: function(loading) {
+      if(loading) {
+        $('#calendarSection').hide();
+        $('#loadingIndicator').show();
+      }
+      else {
+        $('#loadingIndicator').hide();
+        $('#calendarSection').show();
+      }
     },
     selectable: true,
     select: function (start, end) {
