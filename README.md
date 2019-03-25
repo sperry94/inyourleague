@@ -3,9 +3,6 @@
 [![Build Status](https://travis-ci.org/sperry94/inyourleague.svg?branch=master)](https://travis-ci.org/sperry94/inyourleague)
 
 A web app to help little league teams keep track of rosters, practice schedules, etc
-
-http://iyl-webapp.herokuapp.com/
-
 ### References
 - Docker documentation
 - Heroku documentation
