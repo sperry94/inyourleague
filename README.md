@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.org/sperry94/inyourleague.svg?branch=master)](https://travis-ci.org/sperry94/inyourleague)
 
-A web app to help little league teams keep track of rosters, practice schedules, etc
+A web app to help little league teams keep track of rosters, practice schedules, etc.
+Completed as part of Masters Course work at CU Boulder.
 
 ### References
 - Docker documentation
